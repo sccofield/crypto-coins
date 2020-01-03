@@ -5,7 +5,7 @@ class CoinView extends React.Component {
   render(){
     return (
       <View style={styles.container}>
-        <Text>New coin view</Text>
+        <Text>New coin</Text>
       </View>
     )
   }
