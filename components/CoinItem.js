@@ -16,7 +16,7 @@ class CoinItem extends React.Component {
           {this.props.name || 'name'}
         </Text>
         <Text style={[styles.text, {flex: 1}]}>
-          {'Volume: ' + (this.props.volume || 0)}
+          {'Volume: ' + (this.props.volumn || 0)}
         </Text>
         <Text style={[styles.text, {flex: 1}]}>
           {'Price: ' + (this.props.price || 0)}
