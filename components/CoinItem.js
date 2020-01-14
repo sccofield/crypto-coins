@@ -12,18 +12,22 @@ class CoinItem extends React.Component {
           style={{width: 50, height: 50}}
           source={{ uri: this.props.iconUri}}
         />
-        <Text style={[styles.text, {flex: 1}]}>
-          {this.props.name || 'name'}
-        </Text>
-        <Text style={[styles.text, {flex: 1}]}>
-          {'Volume: ' + (this.props.volumn || 0)}
-        </Text>
-        <Text style={[styles.text, {flex: 1}]}>
-          {'Price: ' + (this.props.price || 0)}
-        </Text>
-        <Text style={[styles.text, {flex: 1}]}>
+      <View style={{flex: 1, flexDirection: 'row', alignSelf: 'stretch', alignItems: 'center', justifyContent: 'space-between'}}>
+        <View>
+          <Text style={[styles.text, {flex: 1, fontSize: 20, marginTop: 5}]}>
+            {this.props.name || 'name'}
+          </Text>
+          <Text style={[styles.text, {flex: 1, color: 'darkgrey'}]}>
+            {'Volume: ' + (this.props.volumn || 0)}
+          </Text>
+          <Text style={[styles.text, {flex: 1}]}>
+            {'Price: ' + (this.props.price || 0)}
+          </Text>
+        </View>
+        <Text style={[styles.text, {fontSize: 25, marginRight: 10}]}>
           {'#' + (this.props.rank || 'Rank')}
         </Text>
+      </View>
       </View>
     )
   }
@@ -34,14 +38,16 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 80,
     flexDirection: 'row',
-    backgroundColor: 'skyblue',
+    backgroundColor: 'white',
     alignItems: 'center',
-    justifyContent: 'space-around',
+    // justifyContent: 'space-around',
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgrey',
   },
   text: {
-    color: 'white'
+    color: 'black'
   }
 });
 

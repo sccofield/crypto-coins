@@ -1,5 +1,7 @@
 import React from 'react';
-import {StyleSheet, Text, View, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, FlatList} from 'react-native';
+import { TouchableOpacity } from 'react-native';
+
 
 import CoinItem from '../components/CoinItem';
 import { getCoinIconUri } from '../libs/Constants';
@@ -15,11 +17,6 @@ class CoinView extends React.Component {
 
   componentDidMount(){
     this._getCoinDatas(10)
-
-    setInterval(() => {
-      this._getCoinDatas(10);
-      console.log('toggled');
-    }, 10000);
   }
 
   _getCoinDatas = async (limit) => {
@@ -28,9 +25,12 @@ class CoinView extends React.Component {
     });
 
     try {
-      const response = await fetch(`https://api.coinmarketcap.com/v1/ticker/?limit=${limit}`)
+      const response = await fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=${limit}`, {
+        headers: {
+          'X-CMC_PRO_API_KEY': '989d2905-62ce-4d5b-b2b9-b336c38d89cf'
+        }
+      })
       const responseJson = await response.json();
-
       const date = new Date();
       const now = date.toLocaleString()
 
@@ -38,7 +38,7 @@ class CoinView extends React.Component {
         this.props.refreshDate(now)
       }
       await this.setState({
-        coinDatas: responseJson,
+        coinDatas: responseJson.data,
         isLoading: false
       })
     } catch(error) {
@@ -46,24 +46,34 @@ class CoinView extends React.Component {
     }
   }
 
+  _renderItem = ({item}) => {
+    const { cmc_rank, name, price_usd, quote, last_updated } = item;
+
+    return(
+      <TouchableOpacity 
+       onPress={() => this.props.navigation && 
+        this.props.navigation.push('Youtube', {title: name})}
+      >
+      <CoinItem
+        rank={cmc_rank}
+        name={name}
+        price={quote.USD.price}
+        volumn={quote.USD.market_cap}
+        iconUri={getCoinIconUri(name)}
+      />
+      </TouchableOpacity>
+    );
+  }
+
   render(){
-    let coinItems = this.state.coinDatas.map((data, index) => {
-      const {rank, name, price_usd, market_cap_usd, time} = data;
-      return (
-        <CoinItem
-          key={index}
-          rank={rank}
-          name={name}
-          price={price_usd}
-          volumn={market_cap_usd}
-          iconUri={getCoinIconUri(name)}
-        />
-      )
-    })
     return (
-      <ScrollView style={styles.container}>
-        {coinItems}
-      </ScrollView>
+      <FlatList
+        data={this.state.coinDatas}
+        keyExtractor={(item)=> item.name}
+        renderItem={this._renderItem}
+        refreshing={this.state.isLoading}
+        onRefresh={this._getCoinDatas}
+      />
     )
   }
 }
